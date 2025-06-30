@@ -1,0 +1,30 @@
+<div class="task-card-container">
+  <div class="inner-container">
+    <p class="card-category">{{task.category}}</p>
+    <div>
+      <p class="card-title">{{task.title}}</p>
+      <p class="card-description">{{task.description}}</p>
+    </div>
+    <div class="subtasks-container">
+      <!-- TODO Fortschritsbalken , Inline STyle entfernen-->
+      <div class="fortschrittsbalken"
+        style="width: 150px; height: 10px; border-radius: 3rem; background-color: darkgray;"></div>
+        @for (subtask of task.subtasks; track $index) {
+            <input type="checkbox" checked="subtasks.done">
+        }
+      <!-- TODO Subtasks als Zahl laden -->
+      <p>0/2 Subtasks</p>
+    </div>
+    <div class="user-badges-prio-container">
+      <!-- <p class="card-users">{{task.assignedTo}}</p> -->
+      <div class="user-badges-container">
+        <div class="user-badge1 badge">AS</div>
+        <div class="user-badge2 badge">DE</div>
+        <div class="user-badge3 badge">EF</div>
+      </div>
+
+      <!-- <p class="card-prio">{{task.priority}}</p> -->
+      <img class="card-prio" src="/assets/images/board/prio-urgent.svg" alt="prio icon">
+    </div>
+  </div>
+</div>
