@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {collection, doc, Firestore, onSnapshot, Timestamp, updateDoc,} from '@angular/fire/firestore';
-import { Tasks, TasksFirestoreData } from '../../../interfaces/tasks';
+import { Subtask, Tasks, TasksFirestoreData } from '../../../interfaces/tasks';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +8,7 @@ import { Tasks, TasksFirestoreData } from '../../../interfaces/tasks';
 export class TasksFirbaseService {
   firestore: Firestore = inject(Firestore);
   tasks: Tasks[] = [];
+  subtasks: Subtask[] = [];
   unsubscribe;
 
   constructor() {
@@ -22,13 +23,22 @@ export class TasksFirbaseService {
   getTasks() {
     return collection(this.firestore, 'tasks');
   }
-
   subTasks() {
     return onSnapshot(this.getTasks(), (list) => {
       this.tasks = [];
+      this.subtasks = [];
       list.forEach((element) => {
-        this.tasks.push(this.setTasksObject(element.data(), element.id));
+        const task = this.setTasksObject(element.data(), element.id);
+        this.tasks.push(task);
+        if (task.subtasks && Array.isArray(task.subtasks)) {
+          task.subtasks.forEach(sub => {
+            const titleRef = sub || '';
+            this.subtasks.push({ title: titleRef, done: false});
+          }) 
+            console.log(this.subtasks.length);
+        }
       });
+
     });
   }
 
