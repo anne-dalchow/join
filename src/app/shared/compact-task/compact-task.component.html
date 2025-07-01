@@ -9,6 +9,9 @@
       <!-- TODO Fortschritsbalken , Inline STyle entfernen-->
       <div class="fortschrittsbalken"
         style="width: 150px; height: 10px; border-radius: 3rem; background-color: darkgray;"></div>
+        @for (subtask of subtasks; track $index) {
+            <input type="checkbox" [(ngModel)]="subtask.done" checked = false>
+        }
       <!-- TODO Subtasks als Zahl laden -->
       <p>0/2 Subtasks</p>
     </div>

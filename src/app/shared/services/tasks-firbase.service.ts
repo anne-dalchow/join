@@ -30,19 +30,12 @@ export class TasksFirbaseService {
       list.forEach((element) => {
         const task = this.setTasksObject(element.data(), element.id);
         this.tasks.push(task);
-        if (task.subtasks && Array.isArray(task.subtasks)) {
-          task.subtasks.forEach(sub => {
-            const titleRef = sub || '';
-            this.subtasks.push({ title: titleRef, done: false});
-          }) 
-            console.log(this.subtasks.length);
-        }
       });
-
     });
   }
 
   setTasksObject(obj: TasksFirestoreData, id: string): Tasks {
+    const subtask = Array.isArray(obj.subtasks) ? obj.subtasks.map(title => typeof title === 'string' ? { title, done: false } : title) : [];
     return {
       id: id,
       assignedTo: obj.assignedTo || [],
@@ -51,7 +44,7 @@ export class TasksFirbaseService {
       description: obj.description || '',
       priority: obj.priority || '',
       status: obj.status || '',
-      subtasks: obj.subtasks || [],
+      subtasks: subtask,
       title: obj.title || '',
     };
   }
