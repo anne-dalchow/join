@@ -10,6 +10,7 @@ export class TasksFirbaseService {
   tasks: Tasks[] = [];
   subtasks: Subtask[] = [];
   unsubscribe;
+  onTaskChanged?: (tasks: Tasks[]) => void;
 
   constructor() {
     this.unsubscribe = this.subTasks();
@@ -31,6 +32,9 @@ export class TasksFirbaseService {
         const task = this.setTasksObject(element.data(), element.id);
         this.tasks.push(task);
       });
+      if (this.onTaskChanged) this.onTaskChanged(this.tasks); {
+        
+      }
     });
   }
 

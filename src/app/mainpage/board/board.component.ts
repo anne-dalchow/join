@@ -1,14 +1,28 @@
 import { Component, Input } from '@angular/core';
-import {CdkDrag, CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray, transferArrayItem,} from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDropList,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { CompactTaskComponent } from '../../shared/compact-task/compact-task.component';
 import { TasksFirbaseService } from '../../shared/services/tasks-firbase.service';
 import { Tasks } from '../../../interfaces/tasks';
 import { doc, updateDoc } from 'firebase/firestore';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CompactTaskComponent, DragDropModule, CdkDrag, CdkDropList],
+  imports: [
+    CompactTaskComponent,
+    DragDropModule,
+    CdkDrag,
+    CdkDropList,
+    FormsModule,
+  ],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
 })
@@ -16,36 +30,30 @@ export class BoardComponent {
   constructor(public taskService: TasksFirbaseService) {}
   @Input() selcetedTask: Tasks | null = null;
 
-  todo: Tasks[] = [];
+  searchText: string = '';
 
-  inprogress: Tasks[] = [];
+  filteredTasks: Tasks[] = [];
 
-  awaitfeedback: Tasks[] = [];
+  ngOnInit(): void {
+    this.filteredTasks = this.taskService.tasks;
 
-  done: Tasks[] = [];
+    this.taskService.onTaskChanged = (tasks: Tasks[]) => {
+      this.filteredTasks = tasks;
+      this.searchTask();
+    };
+  }
 
   get todoTasks() {
-    this.todo = this.taskService.tasks.filter((task) => task.status === 'todo');
-    return this.todo;
+    return this.filteredTasks.filter((task) => task.status === 'todo');
   }
-
   get inProgressTasks() {
-    this.inprogress = this.taskService.tasks.filter(
-      (task) => task.status === 'inprogress'
-    );
-    return this.inprogress;
+    return this.filteredTasks.filter((task) => task.status === 'inprogress');
   }
-
   get awaitFeedbackTasks() {
-    this.awaitfeedback = this.taskService.tasks.filter(
-      (task) => task.status === 'awaitfeedback'
-    );
-    return this.awaitfeedback;
+    return this.filteredTasks.filter((task) => task.status === 'awaitfeedback');
   }
-
   get doneTasks() {
-    this.done = this.taskService.tasks.filter((task) => task.status === 'done');
-    return this.done;
+    return this.filteredTasks.filter((task) => task.status === 'done');
   }
 
   drop(event: CdkDragDrop<Tasks[]>) {
@@ -63,23 +71,42 @@ export class BoardComponent {
         event.currentIndex
       );
 
-    const movedTask = event.container.data[event.currentIndex];
-    const newStatus = this.getStatusByArray(event);
-    if (movedTask && newStatus) {
-      movedTask.status = newStatus;
-      if (typeof movedTask.id === 'string') {
-        this.taskService.updateTaskStatus(movedTask.id, { status: newStatus });
+      const movedTask = event.container.data[event.currentIndex];
+      const newStatus = this.getStatusByArray(event);
+      if (movedTask && newStatus) {
+        movedTask.status = newStatus;
+        if (typeof movedTask.id === 'string') {
+          this.taskService.updateTaskStatus(movedTask.id, {
+            status: newStatus,
+          });
+        }
       }
-    }
     }
   }
 
-private getStatusByArray(event: CdkDragDrop<Tasks[]>) {
-  const id = (event.container.id as string);
-  if (id.includes('todo')) return 'todo';
-  if (id.includes('inprogress')) return 'inprogress';
-  if (id.includes('awaitfeedback')) return 'awaitfeedback';
-  if (id.includes('done')) return 'done';
-  return '';
-}
+  private getStatusByArray(event: CdkDragDrop<Tasks[]>) {
+    const id = event.container.id as string;
+    if (id.includes('todo')) return 'todo';
+    if (id.includes('inprogress')) return 'inprogress';
+    if (id.includes('awaitfeedback')) return 'awaitfeedback';
+    if (id.includes('done')) return 'done';
+    return '';
+  }
+
+  searchKey(data: string) {
+    this.searchText = data;
+    this.searchTask();
+  }
+
+  searchTask() {
+    const search = this.searchText.toLowerCase();
+    if (!search) {
+      this.filteredTasks = this.taskService.tasks;
+    }
+    this.filteredTasks = this.taskService.tasks.filter(
+      (element) =>
+        element.title?.toLowerCase().includes(search) ||
+        element.description?.toLowerCase().includes(search)
+    );
+  }
 }

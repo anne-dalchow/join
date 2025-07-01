@@ -1,19 +1,27 @@
 <div class="task-card-container">
   <div class="inner-container">
-    <p class="card-category">{{task.category}}</p>
+    <p class="card-category">{{ task.category }}</p>
     <div>
-      <p class="card-title">{{task.title}}</p>
-      <p class="card-description">{{task.description}}</p>
+      <p class="card-title">{{ task.title }}</p>
+      <p class="card-description">{{ task.description }}</p>
     </div>
     <div class="subtasks-container">
       <!-- TODO Fortschritsbalken , Inline STyle entfernen-->
-      <div class="fortschrittsbalken"
-        style="width: 150px; height: 10px; border-radius: 3rem; background-color: darkgray;"></div>
-        @for (subtask of subtasks; track $index) {
-            <input type="checkbox" [(ngModel)]="subtask.done" checked = false>
-        }
+      @if (task.subtasks && task.subtasks.length > 0) {
+      <div class="progress-bar-container">
+        <div class="custom-progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="(getSubtasksDone() / getSubtaskLength()) * 100"
+          ></div>
+        </div>
+        <p>{{ getSubtasksDone() }}/{{ task.subtasks?.length }} Subtask</p>
+      </div>
+      } @for (subtask of task.subtasks; track $index) {
+      <input type="checkbox" [(ngModel)]="subtask.done" />
+      <p>{{ subtask.title }}</p>
+      }
       <!-- TODO Subtasks als Zahl laden -->
-      <p>0/2 Subtasks</p>
     </div>
     <div class="user-badges-prio-container">
       <!-- <p class="card-users">{{task.assignedTo}}</p> -->
@@ -24,7 +32,11 @@
       </div>
 
       <!-- <p class="card-prio">{{task.priority}}</p> -->
-      <img class="card-prio" src="/assets/images/board/prio-urgent.svg" alt="prio icon">
+      <img
+        class="card-prio"
+        src="/assets/images/board/prio-urgent.svg"
+        alt="prio icon"
+      />
     </div>
   </div>
 </div>

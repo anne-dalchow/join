@@ -14,11 +14,19 @@ import { FormsModule } from '@angular/forms';
 export class CompactTaskComponent {
   @Input() task!: Tasks;
   @Input() subtasks!: Subtask[];
-  constructor(private taskService: TasksFirbaseService) {
-
-  }
+  selectedSubtask: Subtask | null = null;
+  constructor(private taskService: TasksFirbaseService) {}
 
   getList() {
     return this.taskService.tasks;
   }
+
+  getSubtasksDone(): number {
+    return this.task?.subtasks?.filter((sub) => sub.done).length ?? 0;
+  }
+
+  getSubtaskLength(): number {
+    return this.task?.subtasks?.length ?? 0;
+  }
+
 }
