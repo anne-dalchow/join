@@ -1,6 +1,13 @@
 <div class="task-card-container">
   <div class="inner-container">
-    <p class="card-category">{{ task.category }}</p>
+
+      <p [ngClass]="{
+        'blue': task.category === 'User Story',
+        'green': task.category === 'Technical Task'
+      }" class="card-category">
+        {{ task.category }}
+      </p>
+
     <div>
       <p class="card-title">{{ task.title }}</p>
       <p class="card-description">{{ task.description }}</p>
@@ -15,20 +22,23 @@
             [style.width.%]="(getSubtasksDone() / getSubtaskLength()) * 100"
           ></div>
         </div>
-        <p>{{ getSubtasksDone() }}/{{ task.subtasks?.length }} Subtask</p>
+        <div>
+          <p>{{ getSubtasksDone() }}/{{ task.subtasks.length }} Subtask</p>
+        </div>
       </div>
-      } @for (subtask of task.subtasks; track $index) {
-      <input type="checkbox" [(ngModel)]="subtask.done" />
-      <p>{{ subtask.title }}</p>
       }
+      <!-- @for (subtask of task.subtasks; track $index) {
+    <input type="checkbox" [(ngModel)]="subtask.done" />
+    <p>{{ subtask.title }}</p>
+    } -->
       <!-- TODO Subtasks als Zahl laden -->
     </div>
     <div class="user-badges-prio-container">
       <!-- <p class="card-users">{{task.assignedTo}}</p> -->
       <div class="user-badges-container">
         <div class="user-badge1 badge">AS</div>
-        <div class="user-badge2 badge">DE</div>
-        <div class="user-badge3 badge">EF</div>
+        <div class="user-badge2 badge m-l">DE</div>
+        <div class="user-badge3 badge m-l">EF</div>
       </div>
 
       <!-- <p class="card-prio">{{task.priority}}</p> -->
