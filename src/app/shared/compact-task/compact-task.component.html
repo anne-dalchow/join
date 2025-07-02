@@ -1,16 +1,20 @@
 <div class="task-card-container">
   <div class="inner-container">
-
-      <p [ngClass]="{
-        'blue': task.category === 'User Story',
-        'green': task.category === 'Technical Task'
-      }" class="card-category">
-        {{ task.category }}
-      </p>
+    <p
+      [ngClass]="{
+        blue: task.category === 'User Story',
+        green: task.category === 'Technical Task'
+      }"
+      class="card-category"
+    >
+      {{ task.category }}
+    </p>
 
     <div>
       <p class="card-title">{{ task.title }}</p>
-      <p class="card-description">{{ task.description }}</p>
+      <p class="card-description">
+        {{ getShortDescription(task.description, 40) }}
+      </p>
     </div>
     <div class="subtasks-container">
       <!-- TODO Fortschritsbalken , Inline STyle entfernen-->

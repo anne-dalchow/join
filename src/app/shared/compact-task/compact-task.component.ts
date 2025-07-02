@@ -29,4 +29,8 @@ export class CompactTaskComponent {
     return this.task?.subtasks?.length ?? 0;
   }
 
+  getShortDescription(desc: string | undefined, max: number = 40): string {
+    if (!desc) return '';
+    return desc.length > max ? desc.slice(0, max) + '...' : desc;
+  }
 }
