@@ -26,8 +26,8 @@ export const routes: Routes = [
   { path: 'help', component: HelpComponent, canActivate: [AuthGuard] },
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+NgModule({
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-})
+});
 export class AppRoutingModule {}
