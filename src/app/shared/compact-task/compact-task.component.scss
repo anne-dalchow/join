@@ -10,7 +10,6 @@
   border-radius: 24px;
   width: 100%;
   max-width: 350px;
-  min-width: 200px;
   height: 300px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -21,6 +20,10 @@
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  @media(max-width: 1023px) {
+    width: clamp(250px, 10vw, 300px);
+  }
 
   &:hover {
     transform: translateY(-2px);
