@@ -26,12 +26,13 @@
         <div class="single-contact" [ngClass]="{ 'active': selectedContact?.id === contact.id }"
           (click)="contact.id && openSingleContact(contact); contact.id && getContactField(contact.id)">
           <div class="contact-initials" [style.background]="getColorForLetter(contact.firstName.charAt(0))">
-            <p>{{ contact.firstName.charAt(0).toUpperCase() }}{{ contact.lastName.charAt(0).toUpperCase() }}</p> 
+            <p>{{ contact.firstName.charAt(0).toUpperCase() }}{{ contact.lastName.charAt(0).toUpperCase() }}</p>
           </div>
           <div>
             <p class="contact-name">{{ contact.firstName }} {{ contact.lastName }} @if (getUid() === contact.id) {
-            <span class="me-tag">(Me)</span>
-            }</p> 
+              <span class="me-tag">(Me)</span>
+              }
+            </p>
             <p class="contact-email">{{ contact.email }}</p>
           </div>
         </div>
@@ -42,14 +43,18 @@
   </div>}
 
   <section class="contact-container" [ngClass]="{ 'responsive-contact-open': isOpen && selectedContact}">
-    <div class="contact-container-heading">
-      <h2>Contacts</h2>
-      <div></div>
-      <p>Better with a team</p>
+    <div class="contact-container-heading-wrapper">
+      <div class="contact-container-heading">
+        <h2>Contacts</h2>
+        <div class="border-vertical"></div>
+        <p>Better with a team</p>
+
+      </div>
+      <div (click)="goBack()" class="image-container">
+        <img src="/assets/images/icons/arrow-left-line.svg" alt="" />
+      </div>
     </div>
-    <div (click)="goBack()" class="image-container">
-      <img src="/assets/images/icons/arrow-left-line.svg" alt="" />
-    </div>
+
     @if (!isMobile || (isMobile && isOpen)) {
     <section class="single-contact-container" [ngClass]="{ 'open-contact': isOpen && selectedContact }">
       <div class="name-badge-container">

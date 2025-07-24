@@ -113,7 +113,13 @@ hr {
       display: flex;
       flex-direction: column;
       padding: clamp(1.5rem, 4vw, 3rem);
-      overflow-x: auto;
+    }
+
+    .contact-container-heading-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .contact-container-heading {
@@ -121,7 +127,7 @@ hr {
       margin-bottom: 1.5rem;
       max-width: fit-content;
 
-      div {
+      .border-vertical {
         background-color: #29abe2;
         width: 2px;
         height: 50px;
@@ -158,7 +164,7 @@ hr {
         padding-top: clamp(0.5rem, 1vw, 4rem);
         align-items: start;
 
-        >div {
+        .border-vertical {
           order: 3;
           height: 2px;
           width: 50%;
@@ -169,10 +175,7 @@ hr {
 
   .image-container {
     display: none;
-    position: absolute;
-    right: -5%;
-    top: 12%;
-    z-index: 10;
+
     background-color: var(--main-bg-color);
     border-radius: 50%;
 
@@ -266,6 +269,9 @@ hr {
     position: absolute;
     right: -20%;
     bottom: 3%;
+    transform: translateX(100%);
+    opacity: 0;
+    animation: none;
 
     >div {
       display: flex;
@@ -282,6 +288,7 @@ hr {
     &.show {
       display: flex;
       z-index: 999;
+      animation: slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
       @media (min-width: 767px) {
         display: none;
